@@ -14,9 +14,10 @@ pygame.display.set_caption("Snake Game🐍")
 
 #Step 03 : Colors and Clock
 WHITE = (255, 255, 255)
-GREEN = (50, 142, 110)
-LITE_GREEN = (255, 238, 188)
-BLACK = (0, 0, 0)
+SNAKE_COLOR = (102, 255, 178)    # bright teal
+FOOD_COLOR = (255, 102, 102)     # bright red
+BG_COLOR = (30, 30, 40)          # dark bluish background
+GRID_COLOR = (50, 50, 60)        # subtle grid color
 
 clock = pygame.time.Clock()
 
@@ -37,12 +38,23 @@ def init_game():
 snake, snake_direction, food = init_game()
 
 #Step 05 : Drawing co-ordinates
+def draw_grid():
+    for x in range(0, WIDTH, CELL_SIZE):
+        pygame.draw.line(screen, GRID_COLOR, (x, 0), (x, HEIGHT))
+    for y in range(0, HEIGHT, CELL_SIZE):
+        pygame.draw.line(screen, GRID_COLOR, (0, y), (WIDTH, y))
+
 def draw_snake(snake):
-    for block in snake:
-        pygame.draw.rect(screen, LITE_GREEN, pygame.Rect(block[0], block[1], CELL_SIZE, CELL_SIZE), border_radius=4)
+    for i, block in enumerate(snake):
+        # Gradient effect on snake blocks
+        color_value = 255 - i*10 if 255 - i*10 > 50 else 50
+        color = (color_value, 255, 180)
+        pygame.draw.rect(screen, color, pygame.Rect(block[0], block[1], CELL_SIZE, CELL_SIZE), border_radius=6)
 
 def draw_food(food):
-    pygame.draw.rect(screen, GREEN, pygame.Rect(food[0], food[1], CELL_SIZE, CELL_SIZE), border_radius=6)
+    pygame.draw.rect(screen, FOOD_COLOR, pygame.Rect(food[0], food[1], CELL_SIZE, CELL_SIZE), border_radius=6)
+    # small glow effect
+    pygame.draw.rect(screen, (255, 150, 150), pygame.Rect(food[0]+4, food[1]+4, CELL_SIZE-8, CELL_SIZE-8), border_radius=3)
 
 def draw_score(score):
     score_text = font.render("Score : " + str(score), True, WHITE)
@@ -81,7 +93,7 @@ def collision(snake):
     return False
 
 def show_game_over():
-    game_over_text = game_over_font.render("Game Over!", True, WHITE)
+    game_over_text = game_over_font.render("Game Over!", True, (255, 102, 102))
     restart_text = font.render("Press SPACE to Play Again | ESC to Quit", True, WHITE)
 
     screen.blit(game_over_text, (WIDTH // 2 - 90, HEIGHT // 2 - 40))
@@ -94,7 +106,8 @@ Game_over = False
 
 while Game_running:
 
-    screen.fill(BLACK)
+    screen.fill(BG_COLOR)
+    draw_grid()  # optional grid for better look
     score = len(snake) - 3
 
     for KeyPressed in pygame.event.get():
@@ -143,7 +156,7 @@ while Game_running:
         show_game_over()
 
     pygame.display.update()
-    clock.tick(5)
+    clock.tick(7)  # slightly faster for fun
 
 pygame.quit()
 sys.exit()
