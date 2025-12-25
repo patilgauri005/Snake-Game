@@ -4,10 +4,10 @@ A simple and fun Snake Game built using Python and Pygame. Features smooth contr
 A simple Snake Game made using Python & Pygame.
 
 ## Controls
-⬆ Up  
-⬇ Down  
-⬅ Left  
-➡ Right  
+⬆- Up  
+⬇- Down  
+⬅ - Left  
+➡ - Right  
 
 Press SPACE to restart  
 Press ESC to exit
